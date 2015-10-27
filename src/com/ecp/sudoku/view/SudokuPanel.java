@@ -1,6 +1,6 @@
 package com.ecp.sudoku.view;
 
-import com.ecp.sudoku.model.SudokuPuzzel;
+import com.ecp.sudoku.model.SudokuPuzzle;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,9 +17,9 @@ public class SudokuPanel extends JPanel {
 
     private SudokuFrame frame;
 
-    private SudokuPuzzel model;
+    private SudokuPuzzle model;
 
-    public SudokuPanel(SudokuPuzzel model, SudokuFrame frame){
+    public SudokuPanel(SudokuFrame frame, SudokuPuzzle model){
         this.frame = frame;
         this.model = model;
         createPartController();

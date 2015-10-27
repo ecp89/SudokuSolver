@@ -17,7 +17,7 @@ public class SudokuCell {
     private Point cellLocation;
 
     public SudokuCell(){
-        this.maxValue = SudokuPuzzel.PUZZLE_WIDTH;
+        this.maxValue = SudokuPuzzle.PUZZLE_WIDTH;
     }
 
     public int getValue() {
@@ -105,4 +105,12 @@ public class SudokuCell {
         g.drawLine(x + 2, y, x + 2, y + width);
     }
 
+    public boolean contains(Point point) {
+        return bounds.contains(point);
+    }
+
+    public void init(int maxValue) {
+        this.value = 0;
+        this.isInital = false;
+    }
 }

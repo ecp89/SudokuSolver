@@ -8,9 +8,11 @@ import java.awt.*;
 
 
 
-public class SudokuPuzzel {
+public class SudokuPuzzle {
 
     protected static final int PUZZLE_WIDTH = 9;
+
+    private boolean isSetValues;
 
     private int drawWidth;
     private int puzzleWidth;
@@ -23,7 +25,7 @@ public class SudokuPuzzel {
             { 3, 6, 9, 3, 6, 9, 3, 6, 9 }, { 1, 4, 7, 1, 4, 7, 1, 4, 7 },
             { 2, 5, 8, 2, 5, 8, 2, 5, 8 }, { 3, 6, 9, 3, 6, 9, 3, 6, 9 } };
 
-    public SudokuPuzzel(){
+    public SudokuPuzzle(){
         this.drawWidth = 80; //not sure how this number comes about
         this.puzzleWidth = PUZZLE_WIDTH;
         this.cells = new SudokuCell[puzzleWidth][puzzleWidth];
@@ -39,6 +41,16 @@ public class SudokuPuzzel {
         }
     }
 
+    public void init() {
+        for (int i = 0; i < puzzleWidth; i++) {
+            for (int j = 0; j < puzzleWidth; j++) {
+                cells[i][j].init(puzzleWidth);
+            }
+        }
+    }
+
+
+
     public int getDrawWidth() {
         return drawWidth;
     }
@@ -47,7 +59,13 @@ public class SudokuPuzzel {
         return PUZZLE_WIDTH;
     }
 
+    public boolean isSetValues() {
+        return isSetValues;
+    }
 
+    public void setIsSetValues(boolean isSetValues) {
+        this.isSetValues = isSetValues;
+    }
 
     /**
      * The x and y being incremented by the drawWidth makes is so we
@@ -66,5 +84,21 @@ public class SudokuPuzzel {
             }
             x+=drawWidth;
         }
+    }
+
+    public SudokuCell getSudokuCellLocation(Point point) {
+        for(int i = 0; i < puzzleWidth; i++){
+            for(int j = 0; j < puzzleWidth; j++){
+                if(cells[i][j].contains(point)){
+                    return cells[i][j];
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public void setSetValues(boolean isSetValues) {
+        this.isSetValues = isSetValues;
     }
 }

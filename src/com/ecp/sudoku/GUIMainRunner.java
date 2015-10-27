@@ -6,7 +6,7 @@
 
 package com.ecp.sudoku;
 
-import com.ecp.sudoku.model.SudokuPuzzel;
+import com.ecp.sudoku.model.SudokuPuzzle;
 import com.ecp.sudoku.view.SudokuFrame;
 
 import javax.swing.SwingUtilities;
@@ -18,7 +18,7 @@ public class GUIMainRunner implements Runnable{
 
     @Override
     public void run() {
-        new SudokuFrame(new SudokuPuzzel());
+        new SudokuFrame(new SudokuPuzzle());
     }
 
     public static void main(String[] args){
