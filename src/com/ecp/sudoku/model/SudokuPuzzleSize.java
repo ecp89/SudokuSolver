@@ -9,16 +9,16 @@ public enum SudokuPuzzleSize {
     SIXTEEN_BY_SIXTEEN(16,80),
     TWENTYFIVE_BY_TWENTYFIVE(25,80);
 
-    private final int puzzelWidth;
+    private final int puzzleWidth;
     private final int drawWidth;
 
-    SudokuPuzzleSize(int puzzelWidth, int drawWidth){
-        this.puzzelWidth = puzzelWidth;
+    SudokuPuzzleSize(int puzzleWidth, int drawWidth){
+        this.puzzleWidth = puzzleWidth;
         this.drawWidth = drawWidth;
     }
 
-    public int getPuzzelWidth() {
-        return puzzelWidth;
+    public int getPuzzleWidth() {
+        return puzzleWidth;
     }
 
     public int getDrawWidth() {
@@ -26,7 +26,7 @@ public enum SudokuPuzzleSize {
     }
 
     public int[][] getCellPositions(){
-        int width = this.puzzelWidth;
+        int width = this.puzzleWidth;
         int sqrtWidth = (int) Math.sqrt(width);
         int[][] res = new int[width][width];
         int value = 1;
@@ -35,7 +35,7 @@ public enum SudokuPuzzleSize {
                 if (x % sqrtWidth == 0) {
                     if (y % sqrtWidth == 0) {
                         value = 1;
-                    } else if (y + 1 % sqrtWidth == 0) {
+                    } else if ( (y + 1) % sqrtWidth == 0) {
                         value = 7;
                     } else {
                         value = 4;
@@ -43,16 +43,16 @@ public enum SudokuPuzzleSize {
                     res[x][y] = value;
                     value++;
                 } else
-                if (x + 1% sqrtWidth == 0) {
+                if ((x + 1)% sqrtWidth == 0) {
                     if (y % sqrtWidth == 0) {
                         value = 3;
-                    } else if (y + 1 % sqrtWidth == 0) {
+                    } else if ((y + 1 )% sqrtWidth == 0) {
                         value = 9;
                     } else {
                         value = 6;
                     }
                     res[x][y] = value;
-                    value = x + 1 < width ? value : 1;
+                    value = x + 1 < width ? 1 : width;
                 } else {
                     res[x][y] = value;
                 }
