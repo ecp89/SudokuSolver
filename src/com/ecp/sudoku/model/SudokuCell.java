@@ -133,10 +133,10 @@ public class SudokuCell {
 
     private BufferedImage createImage(Font font, FontRenderContext frc,
                                       int width, String s) {
-        int margin = 6;
+        int margin = (int) (0.075 * SudokuPuzzle.PUZZLE_SIZE.getDrawWidth());
         double extra = (double) margin + margin;
 
-        Font largeFont = font.deriveFont((float) (width * 2 / 3));
+        Font largeFont = font.deriveFont((float) (width * 1 / 2));
         Rectangle2D r = largeFont.getStringBounds(s, frc);
 
         BufferedImage image = new BufferedImage((int) Math.round(r.getWidth()

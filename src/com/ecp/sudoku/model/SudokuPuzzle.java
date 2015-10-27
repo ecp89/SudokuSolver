@@ -10,7 +10,7 @@ import java.awt.*;
 
 public class SudokuPuzzle {
 
-    protected static final int PUZZLE_WIDTH = 9;
+    protected static final SudokuPuzzleSize PUZZLE_SIZE = SudokuPuzzleSize.FOUR_BY_FOUR;
 
     private boolean isSetValues;
 
@@ -19,15 +19,11 @@ public class SudokuPuzzle {
 
     private SudokuCell[][] cells;
 
-    private int[][]         cellPosition    = { { 1, 4, 7, 1, 4, 7, 1, 4, 7 },
-            { 2, 5, 8, 2, 5, 8, 2, 5, 8 }, { 3, 6, 9, 3, 6, 9, 3, 6, 9 },
-            { 1, 4, 7, 1, 4, 7, 1, 4, 7 }, { 2, 5, 8, 2, 5, 8, 2, 5, 8 },
-            { 3, 6, 9, 3, 6, 9, 3, 6, 9 }, { 1, 4, 7, 1, 4, 7, 1, 4, 7 },
-            { 2, 5, 8, 2, 5, 8, 2, 5, 8 }, { 3, 6, 9, 3, 6, 9, 3, 6, 9 } };
+    private int[][] cellPosition = PUZZLE_SIZE.getCellPositions();
 
     public SudokuPuzzle(){
-        this.drawWidth = 80; //not sure how this number comes about
-        this.puzzleWidth = PUZZLE_WIDTH;
+        this.drawWidth = PUZZLE_SIZE.getDrawWidth(); //not sure how this number comes about
+        this.puzzleWidth = PUZZLE_SIZE.getPuzzleWidth();
         this.cells = new SudokuCell[puzzleWidth][puzzleWidth];
         set(puzzleWidth);
     }
@@ -53,10 +49,6 @@ public class SudokuPuzzle {
 
     public int getDrawWidth() {
         return drawWidth;
-    }
-
-    public static int getPuzzleWidth() {
-        return PUZZLE_WIDTH;
     }
 
     public boolean isSetValues() {
@@ -100,5 +92,9 @@ public class SudokuPuzzle {
 
     public void setSetValues(boolean isSetValues) {
         this.isSetValues = isSetValues;
+    }
+
+    public int getPuzzleWidth() {
+        return puzzleWidth;
     }
 }

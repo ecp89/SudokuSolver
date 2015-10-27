@@ -6,8 +6,8 @@ package com.ecp.sudoku.model;
 public enum SudokuPuzzleSize {
     FOUR_BY_FOUR(4, 80),
     NINE_BY_NINE(9,80),
-    SIXTEEN_BY_SIXTEEN(16,80),
-    TWENTYFIVE_BY_TWENTYFIVE(25,80);
+    SIXTEEN_BY_SIXTEEN(16,44),
+    TWENTYFIVE_BY_TWENTYFIVE(25,28);
 
     private final int puzzleWidth;
     private final int drawWidth;

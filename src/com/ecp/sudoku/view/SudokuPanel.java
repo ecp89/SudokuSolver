@@ -27,10 +27,11 @@ public class SudokuPanel extends JPanel {
     }
 
     private void createPartController() {
-        new JPanel(); //Very not sure why this is here
+        new JPanel(); //TODO Very not sure why this is here
         int width = model.getDrawWidth() * model.getPuzzleWidth() + 1;
         addMouseListener(new SetValueListener(frame, model));
         setPreferredSize(new Dimension(width, width));
+        
     }
 
     @Override
