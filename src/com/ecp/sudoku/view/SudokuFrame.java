@@ -46,10 +46,10 @@ public class SudokuFrame {
 
 
         //This should probably go in the ButtonPanel class
-        JPanel holderPanel = new JPanel();
-        holderPanel.setLayout(new FlowLayout());
-        holderPanel.add(buttonPanel.getPanel());
-        mainPanel.add(holderPanel);
+        JPanel holderPanel = new JPanel();          // |
+        holderPanel.setLayout(new FlowLayout());    // |
+        holderPanel.add(buttonPanel.getPanel());    // |
+        mainPanel.add(holderPanel);                 // |
 
         frame.setLayout(new FlowLayout());
         frame.add(mainPanel);
