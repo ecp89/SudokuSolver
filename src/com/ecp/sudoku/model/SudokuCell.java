@@ -1,13 +1,16 @@
 package com.ecp.sudoku.model;
 
 import java.awt.*;
+import java.awt.font.FontRenderContext;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 
 /**
  * Created by ericpass on 10/26/15.
  */
 public class SudokuCell {
 
-    private boolean isInital;
+    private boolean isInitial;
 
     private int value;
     private int maxValue;
@@ -16,9 +19,17 @@ public class SudokuCell {
 
     private Point cellLocation;
 
-    public SudokuCell(){
-        this.maxValue = SudokuPuzzle.PUZZLE_WIDTH;
+
+    public SudokuCell() {
+        this.maxValue = 9;
+        init(maxValue);
     }
+
+    public void init(int maxValue) {
+        this.value = 0;
+        this.isInitial = false;
+    }
+
 
     public int getValue() {
         return value;
@@ -28,8 +39,8 @@ public class SudokuCell {
         this.value = value;
     }
 
-    public void setIsInital(boolean isInital) {
-        this.isInital = isInital;
+    public void setIsInitial(boolean isInitial) {
+        this.isInitial = isInitial;
     }
 
     public Point getCellLocation() {
@@ -49,6 +60,20 @@ public class SudokuCell {
         g.fillRect(x,y,width,width); //make background white
         g.setColor(Color.BLACK);
         drawBorder(g,x,y,width,cellPosition);
+        g.drawRect(x, y, width, width);
+        drawBorder(g, x, y, width, cellPosition);
+        Font font = g.getFont();
+        FontRenderContext frc = new FontRenderContext(null, true, true);
+        if (value > 0) {
+            String s = Integer.toString(value);
+
+            BufferedImage image = createImage(font, frc, width, s);
+
+            int xx = x + (width - image.getWidth()) / 2;
+            int yy = y + (width - image.getHeight()) / 2;
+            g.drawImage(image, xx, yy, null);
+
+        }
     }
 
     private void drawBorder(Graphics g, int x, int y, int width,
@@ -105,12 +130,36 @@ public class SudokuCell {
         g.drawLine(x + 2, y, x + 2, y + width);
     }
 
-    public boolean contains(Point point) {
-        return bounds.contains(point);
+    private BufferedImage createImage(Font font, FontRenderContext frc,
+                                      int width, String s) {
+        int margin = 6;
+        double extra = (double) margin + margin;
+
+        Font largeFont = font.deriveFont((float) (width * 2 / 3));
+        Rectangle2D r = largeFont.getStringBounds(s, frc);
+
+        BufferedImage image = new BufferedImage((int) Math.round(r.getWidth()
+                + extra), (int) Math.round(extra - r.getY()),
+                BufferedImage.TYPE_INT_RGB);
+        Graphics gg = image.getGraphics();
+        gg.setColor(Color.WHITE);
+        gg.fillRect(0, 0, image.getWidth(), image.getHeight());
+
+        if (isInitial) {
+            gg.setColor(Color.BLUE);
+        } else {
+            gg.setColor(Color.CYAN);
+        }
+        int x = margin;
+        int y = -(int) Math.round(r.getY());
+        gg.setFont(largeFont);
+        gg.drawString(s, x, y);
+        gg.dispose();
+        return image;
     }
 
-    public void init(int maxValue) {
-        this.value = 0;
-        this.isInital = false;
+
+    public boolean contains(Point point) {
+        return bounds.contains(point);
     }
 }

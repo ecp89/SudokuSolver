@@ -37,7 +37,7 @@ public class SetValueListener implements MouseListener {
                 int value = getValue(sudokuCell);
                 if(value > 0){
                     sudokuCell.setValue(value);
-                    sudokuCell.setIsInital(true);
+                    sudokuCell.setIsInitial(true);
                     frame.repaintSudokuPanel();
                 }
             }
