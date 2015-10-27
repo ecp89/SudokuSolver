@@ -69,6 +69,7 @@ public class SudokuCell {
 
             BufferedImage image = createImage(font, frc, width, s);
 
+            //I think this is for centering the image in the box
             int xx = x + (width - image.getWidth()) / 2;
             int yy = y + (width - image.getHeight()) / 2;
             g.drawImage(image, xx, yy, null);

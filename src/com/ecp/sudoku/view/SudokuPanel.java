@@ -1,5 +1,6 @@
 package com.ecp.sudoku.view;
 
+import com.ecp.sudoku.controller.SetValueListener;
 import com.ecp.sudoku.model.SudokuPuzzle;
 
 import javax.swing.*;
@@ -28,6 +29,7 @@ public class SudokuPanel extends JPanel {
     private void createPartController() {
         new JPanel(); //Very not sure why this is here
         int width = model.getDrawWidth() * model.getPuzzleWidth() + 1;
+        addMouseListener(new SetValueListener(frame, model));
         setPreferredSize(new Dimension(width, width));
     }
 
