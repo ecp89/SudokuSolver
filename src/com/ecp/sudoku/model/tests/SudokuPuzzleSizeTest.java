@@ -9,7 +9,7 @@ import static org.junit.Assert.assertArrayEquals;
 /**
  * Created by ericpass on 10/27/15.
  */
-public class SudokuPuzzleSizeTest extends TestCase {
+public class SudokuPuzzleSizeTest {
 
 
     @Test

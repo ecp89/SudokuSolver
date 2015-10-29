@@ -5,12 +5,10 @@ package com.ecp.sudoku.model;
 
 import java.awt.*;
 
-
-
-
+//TODO this might/should be a singleton
 public class SudokuPuzzle {
 
-    protected static final SudokuPuzzleSize PUZZLE_SIZE = SudokuPuzzleSize.FOUR_BY_FOUR;
+    protected static SudokuPuzzleSize PUZZLE_SIZE = SudokuPuzzleSize.NINE_BY_NINE;
 
     private boolean isSetValues;
 
@@ -96,5 +94,44 @@ public class SudokuPuzzle {
 
     public int getPuzzleWidth() {
         return puzzleWidth;
+    }
+
+    public boolean checkIfFinished(){
+        int sqrtOfPuzzleWidth = (int)Math.sqrt(puzzleWidth);
+        int[][] unitAccum = null;
+        for (int x = 0; x < puzzleWidth; x++) {
+            if(x%sqrtOfPuzzleWidth == 0){
+                unitAccum = new int[sqrtOfPuzzleWidth][puzzleWidth];
+            }
+            int[] accumColumn = new int[puzzleWidth];
+            int[] accumRow = new int[puzzleWidth];
+            for (int y = 0; y < puzzleWidth; y++) {
+                try{
+                    int valueColumn = cells[x][y].getValue();
+                    int valueRow = cells[y][x].getValue();
+
+                    //repeat value
+                    if(accumColumn[valueColumn-1] == 1 || accumRow[valueRow - 1] == 1 || unitAccum[y/3][valueColumn - 1] == 1){
+                        return false;
+                    }
+                    //unfinished puzzle
+                    if(valueColumn == 0 || valueRow == 0){
+                        return false;
+                    }
+
+                    accumColumn[valueColumn - 1] = 1;
+                    accumRow[valueRow - 1] = 1;
+                    unitAccum[y/3][valueColumn - 1] = 1;
+
+                } catch(ArrayIndexOutOfBoundsException e){ // number was bigger than puzzleWidth
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public static void setPuzzleSize(SudokuPuzzleSize puzzleSize) {
+        PUZZLE_SIZE = puzzleSize;
     }
 }

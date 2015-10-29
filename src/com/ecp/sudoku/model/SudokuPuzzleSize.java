@@ -4,17 +4,19 @@ package com.ecp.sudoku.model;
  * Created by ericpass on 10/27/15.
  */
 public enum SudokuPuzzleSize {
-    FOUR_BY_FOUR(4, 80),
-    NINE_BY_NINE(9,80),
-    SIXTEEN_BY_SIXTEEN(16,44),
-    TWENTYFIVE_BY_TWENTYFIVE(25,28);
+    FOUR_BY_FOUR(4, 80, "Four by Four"),
+    NINE_BY_NINE(9,80, "Nine by Nine"),
+    SIXTEEN_BY_SIXTEEN(16,44, "Sixteen by Sixteen"),
+    TWENTYFIVE_BY_TWENTYFIVE(25,28, "Twenty Five by Twenty Five");
 
     private final int puzzleWidth;
     private final int drawWidth;
+    private final String displayString;
 
-    SudokuPuzzleSize(int puzzleWidth, int drawWidth){
+    SudokuPuzzleSize(int puzzleWidth, int drawWidth, String displayString){
         this.puzzleWidth = puzzleWidth;
         this.drawWidth = drawWidth;
+        this.displayString = displayString;
     }
 
     public int getPuzzleWidth() {
@@ -23,6 +25,20 @@ public enum SudokuPuzzleSize {
 
     public int getDrawWidth() {
         return drawWidth;
+    }
+
+    public String getDisplayString() {
+        return displayString;
+    }
+
+    public SudokuPuzzleSize getSudokuPuzzleSize(String displayString){
+        for(SudokuPuzzleSize sudokuPuzzleSize: SudokuPuzzleSize.values()){
+            if(sudokuPuzzleSize.displayString.equals(displayString)){
+                return sudokuPuzzleSize;
+            }
+        }
+        assert false : "In getSudokuPuzzleSize could not find value for display string";
+        return null;
     }
 
     public int[][] getCellPositions(){
