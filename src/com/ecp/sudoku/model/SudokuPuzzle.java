@@ -8,7 +8,7 @@ import java.awt.*;
 //TODO this might/should be a singleton
 public class SudokuPuzzle {
 
-    protected static SudokuPuzzleSize PUZZLE_SIZE = SudokuPuzzleSize.NINE_BY_NINE;
+    protected static SudokuPuzzleSize PUZZLE_SIZE = SudokuPuzzleSize.FOUR_BY_FOUR;
 
     private boolean isSetValues;
 
@@ -43,6 +43,13 @@ public class SudokuPuzzle {
         }
     }
 
+    public void bulkSetValues(int[][] values){
+        for(int i = 0; i<values.length; i++){
+            for (int j = 0; j < values.length; j++) {
+                cells[i][j].setValue(values[i][j]);
+            }
+        }
+    }
 
 
     public int getDrawWidth() {
@@ -96,32 +103,34 @@ public class SudokuPuzzle {
         return puzzleWidth;
     }
 
-    public boolean checkIfFinished(){
+    public boolean isValid(){
         int sqrtOfPuzzleWidth = (int)Math.sqrt(puzzleWidth);
-        int[][] unitAccum = null;
+        boolean[][] unitAccum = null;
         for (int x = 0; x < puzzleWidth; x++) {
             if(x%sqrtOfPuzzleWidth == 0){
-                unitAccum = new int[sqrtOfPuzzleWidth][puzzleWidth];
+                unitAccum = new boolean[sqrtOfPuzzleWidth][puzzleWidth];
             }
-            int[] accumColumn = new int[puzzleWidth];
-            int[] accumRow = new int[puzzleWidth];
+            boolean[] accumColumn = new boolean[puzzleWidth];
+            boolean[] accumRow = new boolean[puzzleWidth];
             for (int y = 0; y < puzzleWidth; y++) {
                 try{
                     int valueColumn = cells[x][y].getValue();
                     int valueRow = cells[y][x].getValue();
 
-                    //repeat value
-                    if(accumColumn[valueColumn-1] == 1 || accumRow[valueRow - 1] == 1 || unitAccum[y/3][valueColumn - 1] == 1){
-                        return false;
-                    }
                     //unfinished puzzle
                     if(valueColumn == 0 || valueRow == 0){
                         return false;
                     }
 
-                    accumColumn[valueColumn - 1] = 1;
-                    accumRow[valueRow - 1] = 1;
-                    unitAccum[y/3][valueColumn - 1] = 1;
+                    //repeat value
+                    if(accumColumn[valueColumn-1] || accumRow[valueRow - 1] || unitAccum[y/sqrtOfPuzzleWidth][valueColumn - 1]){
+                        return false;
+                    }
+
+
+                    accumColumn[valueColumn - 1] = true;
+                    accumRow[valueRow - 1] = true;
+                    unitAccum[y/sqrtOfPuzzleWidth][valueColumn - 1] = true;
 
                 } catch(ArrayIndexOutOfBoundsException e){ // number was bigger than puzzleWidth
                     return false;
@@ -129,6 +138,18 @@ public class SudokuPuzzle {
             }
         }
         return true;
+    }
+
+
+
+    public void printPuzzel(){
+        for (int i = 0; i < puzzleWidth; i++) {
+            for (int j = 0; j < puzzleWidth; j++) {
+                System.out.print(cells[i][j].getValue() + " ");
+            }
+            System.out.print("\n");
+        }
+
     }
 
     public static void setPuzzleSize(SudokuPuzzleSize puzzleSize) {

@@ -7,6 +7,13 @@ import org.junit.Test;
 import static org.junit.Assert.assertArrayEquals;
 
 /**
+ * The purpose of this test is just to check that we generate the correct
+ * generaic "cellPosition" arrays which are used to render the gui. Particularly,
+ * it is for the thick lines in the grid.
+ */
+
+
+/**
  * Created by ericpass on 10/27/15.
  */
 public class SudokuPuzzleSizeTest {
