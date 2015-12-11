@@ -3,12 +3,16 @@
  */
 package com.ecp.sudoku.model;
 
+import com.ecp.sudoku.solvers.SudokuSolver;
+
 import java.awt.*;
+import java.util.HashSet;
+import java.util.Set;
 
 //TODO this might/should be a singleton
 public class SudokuPuzzle {
 
-    protected static SudokuPuzzleSize PUZZLE_SIZE = SudokuPuzzleSize.FOUR_BY_FOUR;
+    protected static SudokuPuzzleSize PUZZLE_SIZE = SudokuPuzzleSize.TWENTYFIVE_BY_TWENTYFIVE;
 
     private boolean isSetValues;
 
@@ -29,7 +33,7 @@ public class SudokuPuzzle {
     private void set(int puzzelWidth){
         for(int i = 0; i< puzzelWidth; i++){
             for(int j = 0; j<puzzelWidth; j++){
-                cells[i][j] = new SudokuCell();
+                cells[i][j] = new SudokuCell(puzzelWidth);
                 cells[i][j].setCellLocation(new Point(i,j));
             }
         }
@@ -114,8 +118,8 @@ public class SudokuPuzzle {
             boolean[] accumRow = new boolean[puzzleWidth];
             for (int y = 0; y < puzzleWidth; y++) {
                 try{
-                    int valueColumn = cells[x][y].getValue();
-                    int valueRow = cells[y][x].getValue();
+                    int valueRow = cells[x][y].getValue();
+                    int valueColumn = cells[y][x].getValue();
 
                     //unfinished puzzle
                     if(valueColumn == 0 || valueRow == 0){
@@ -123,14 +127,14 @@ public class SudokuPuzzle {
                     }
 
                     //repeat value
-                    if(accumColumn[valueColumn-1] || accumRow[valueRow - 1] || unitAccum[y/sqrtOfPuzzleWidth][valueColumn - 1]){
+                    if(accumColumn[valueColumn-1] || accumRow[valueRow - 1] || unitAccum[y/sqrtOfPuzzleWidth][valueRow - 1]){
                         return false;
                     }
 
 
                     accumColumn[valueColumn - 1] = true;
                     accumRow[valueRow - 1] = true;
-                    unitAccum[y/sqrtOfPuzzleWidth][valueColumn - 1] = true;
+                    unitAccum[y/sqrtOfPuzzleWidth][valueRow - 1] = true;
 
                 } catch(ArrayIndexOutOfBoundsException e){ // number was bigger than puzzleWidth
                     return false;
@@ -152,7 +156,45 @@ public class SudokuPuzzle {
 
     }
 
+    public HashSet<Integer> getValuesInUnitContainingCell(int x, int y){
+        HashSet<Integer> res = new HashSet<>();
+        int sqrtOfPuzzleWidth = (int)Math.sqrt(puzzleWidth);
+        int startX = (x/sqrtOfPuzzleWidth)*sqrtOfPuzzleWidth;
+        int startY = (y/sqrtOfPuzzleWidth)*sqrtOfPuzzleWidth;
+        for(int i = startX; i<startX+sqrtOfPuzzleWidth;i++){
+            for(int j = startY; j<startY+sqrtOfPuzzleWidth; j++){
+                res.add(cells[i][j].getValue());
+            }
+
+        }
+        return res;
+    }
+
+    public HashSet<Integer> getValidValuesForCell(int x, int y){
+        HashSet<Integer> values = cells[x][y].getSetOfAllPossibleValues();
+        if(values.size() == 1){
+            return values;
+        }
+        for(int i = 0; i<puzzleWidth; i++){
+            values.remove(cells[i][y].getValue());
+            values.remove(cells[x][i].getValue());
+        }
+        values.removeAll(getValuesInUnitContainingCell(x,y));
+
+        return values;
+    }
+
     public static void setPuzzleSize(SudokuPuzzleSize puzzleSize) {
         PUZZLE_SIZE = puzzleSize;
     }
+
+    public boolean isSetCell(int x, int y){
+        return cells[x][y].isInitial();
+    }
+
+    public void setValueForCell(int value, int x, int y){
+        cells[x][y].setValue(value);
+    }
+
+
 }

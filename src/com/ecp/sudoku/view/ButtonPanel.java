@@ -2,11 +2,15 @@ package com.ecp.sudoku.view;
 
 import com.ecp.sudoku.controller.ToggleListener;
 import com.ecp.sudoku.model.SudokuPuzzle;
+import com.ecp.sudoku.solvers.NaiveSolver;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Arrays;
 
 /**
  * Created by ericpass on 10/26/15.
@@ -18,6 +22,9 @@ public class ButtonPanel {
 
     private JToggleButton restPuzzleButton;
     private JToggleButton setValuesButton;
+    private JButton validateButton;
+
+
 
     private JPanel panel;
 
@@ -71,6 +78,20 @@ public class ButtonPanel {
         toggleListener.setToggleButtons(restPuzzleButton, setValuesButton);
         
         setValuesButton.setSelected(true);
+
+        validateButton = new JButton("Solve");
+        validateButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                NaiveSolver solver = new NaiveSolver();
+                solver.SolvePuzzle(model, frame);
+            }
+
+
+
+        });
+        validateButton.setSelected(false);
+        addComponent(panel, validateButton, 0, gridy++, 1, 1, buttonInsets, GridBagConstraints.LINE_START, GridBagConstraints.HORIZONTAL);
     }
 
     private void addComponent(Container container, Component component, int gridx, int gridy, int gridwidth, int gridheight, Insets insets, int anchor, int fill) {

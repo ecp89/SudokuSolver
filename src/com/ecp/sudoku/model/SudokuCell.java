@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.font.FontRenderContext;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.util.HashSet;
 
 /**
  * Created by ericpass on 10/26/15.
@@ -19,15 +20,17 @@ public class SudokuCell {
 
     private Point cellLocation;
 
+    private  HashSet<Integer> setOfAllPossibleValues;
 
-    public SudokuCell() {
-        this.maxValue = 9;
+    public SudokuCell(int maxValue) {
         init(maxValue);
     }
 
     public void init(int maxValue) {
         this.value = 0;
+        this.maxValue = maxValue;
         this.isInitial = false;
+        this.setOfAllPossibleValues = getSetOfAllPossibleValues();
     }
 
 
@@ -75,6 +78,10 @@ public class SudokuCell {
             g.drawImage(image, xx, yy, null);
 
         }
+    }
+
+    public boolean isInitial() {
+        return isInitial;
     }
 
     private void drawBorder(Graphics g, int x, int y, int width,
@@ -159,6 +166,17 @@ public class SudokuCell {
         return image;
     }
 
+    public HashSet<Integer> getSetOfAllPossibleValues(){
+        HashSet<Integer> res = new HashSet<>(maxValue);
+        if(isInitial){
+            res.add(value);
+            return res;
+        }
+        for(int i = 1; i<=maxValue; i++){
+            res.add(i);
+        }
+        return res;
+    }
 
     public boolean contains(Point point) {
         return bounds.contains(point);
