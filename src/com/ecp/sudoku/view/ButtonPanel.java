@@ -2,7 +2,9 @@ package com.ecp.sudoku.view;
 
 import com.ecp.sudoku.controller.ToggleListener;
 import com.ecp.sudoku.model.SudokuPuzzle;
+import com.ecp.sudoku.model.SudokuPuzzleSize;
 import com.ecp.sudoku.solvers.NaiveSolver;
+import javafx.scene.control.ComboBox;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -24,7 +26,7 @@ public class ButtonPanel {
     private JToggleButton setValuesButton;
     private JButton validateButton;
 
-
+    private JComboBox sizeDropDown;
 
     private JPanel panel;
 
@@ -79,6 +81,26 @@ public class ButtonPanel {
         
         setValuesButton.setSelected(true);
 
+        sizeDropDown = new JComboBox(SudokuPuzzleSize.getAllSupportedSizes());
+        sizeDropDown.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JComboBox cb = (JComboBox) e.getSource();
+                String size = (String)cb.getSelectedItem();
+                try{
+                    model.setPuzzleSize(SudokuPuzzleSize.getByDisplayName(size));
+
+                } catch (IllegalArgumentException excpt){
+                    System.err.println("No Valid size for puzzle?");
+                }
+                restPuzzleButton.doClick();
+            }
+        });
+        sizeDropDown.setSelectedIndex(model.getPuzzelSize().ordinal());
+
+        addComponent(panel, sizeDropDown, 0, gridy++, 1, 1, buttonInsets, GridBagConstraints.LINE_START, GridBagConstraints.HORIZONTAL);
+
+
         validateButton = new JButton("Solve");
         validateButton.addActionListener(new ActionListener() {
             @Override
@@ -91,7 +113,14 @@ public class ButtonPanel {
 
         });
         validateButton.setSelected(false);
+
         addComponent(panel, validateButton, 0, gridy++, 1, 1, buttonInsets, GridBagConstraints.LINE_START, GridBagConstraints.HORIZONTAL);
+
+
+
+
+
+
     }
 
     private void addComponent(Container container, Component component, int gridx, int gridy, int gridwidth, int gridheight, Insets insets, int anchor, int fill) {

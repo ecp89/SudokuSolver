@@ -4,10 +4,10 @@ package com.ecp.sudoku.model;
  * Created by ericpass on 10/27/15.
  */
 public enum SudokuPuzzleSize {
-    FOUR_BY_FOUR(4, 80, "Four by Four"),
-    NINE_BY_NINE(9,80, "Nine by Nine"),
-    SIXTEEN_BY_SIXTEEN(16,44, "Sixteen by Sixteen"),
-    TWENTYFIVE_BY_TWENTYFIVE(25,28, "Twenty Five by Twenty Five");
+    FOUR_BY_FOUR(4, 80, "4 by 4"),
+    NINE_BY_NINE(9,80, "9 by 9"),
+    SIXTEEN_BY_SIXTEEN(16,44, "16 by 16"),
+    TWENTYFIVE_BY_TWENTYFIVE(25,28, "25 by 25");
 
     private final int puzzleWidth;
     private final int drawWidth;
@@ -77,5 +77,23 @@ public enum SudokuPuzzleSize {
         }
 
         return res;
+    }
+
+    public static String[] getAllSupportedSizes(){
+        SudokuPuzzleSize[] sizes = SudokuPuzzleSize.values();
+        String[] res = new String[sizes.length];
+        for (int i = 0; i < sizes.length; i++) {
+            res[i] = sizes[i].displayString;
+        }
+        return res;
+    }
+
+    public static SudokuPuzzleSize getByDisplayName(String displayString){
+        for(SudokuPuzzleSize size: SudokuPuzzleSize.values()){
+            if(size.displayString.equals(displayString)){
+                return size;
+            }
+        }
+        throw new IllegalArgumentException();
     }
 }

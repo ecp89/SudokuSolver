@@ -3,46 +3,54 @@
  */
 package com.ecp.sudoku.model;
 
-import com.ecp.sudoku.solvers.SudokuSolver;
-
 import java.awt.*;
 import java.util.HashSet;
-import java.util.Set;
 
 //TODO this might/should be a singleton
 public class SudokuPuzzle {
 
-    protected static SudokuPuzzleSize PUZZLE_SIZE = SudokuPuzzleSize.TWENTYFIVE_BY_TWENTYFIVE;
+    protected static SudokuPuzzleSize DEFAULT_PUZZLE_SIZE = SudokuPuzzleSize.NINE_BY_NINE;
+
+    private SudokuPuzzleSize puzzleSize = DEFAULT_PUZZLE_SIZE;
 
     private boolean isSetValues;
 
-    private int drawWidth;
-    private int puzzleWidth;
-
     private SudokuCell[][] cells;
 
-    private int[][] cellPosition = PUZZLE_SIZE.getCellPositions();
+    private int[][] cellPosition;
 
     public SudokuPuzzle(){
-        this.drawWidth = PUZZLE_SIZE.getDrawWidth(); //not sure how this number comes about
-        this.puzzleWidth = PUZZLE_SIZE.getPuzzleWidth();
-        this.cells = new SudokuCell[puzzleWidth][puzzleWidth];
-        set(puzzleWidth);
+        this(null);
     }
 
-    private void set(int puzzelWidth){
-        for(int i = 0; i< puzzelWidth; i++){
-            for(int j = 0; j<puzzelWidth; j++){
-                cells[i][j] = new SudokuCell(puzzelWidth);
+    public SudokuPuzzle(SudokuPuzzleSize puzzleSize){
+        if(puzzleSize == null){
+            this.puzzleSize = DEFAULT_PUZZLE_SIZE;
+            this.cellPosition = DEFAULT_PUZZLE_SIZE.getCellPositions();
+        } else {
+            this.puzzleSize = puzzleSize;
+            this.cellPosition = puzzleSize.getCellPositions();
+        }
+
+        set();
+
+
+    }
+
+    private void set(){
+        this.cells = new SudokuCell[this.puzzleSize.getPuzzleWidth()][this.puzzleSize.getPuzzleWidth()];
+        for(int i = 0; i< puzzleSize.getPuzzleWidth(); i++){
+            for(int j = 0; j<puzzleSize.getPuzzleWidth(); j++){
+                cells[i][j] = new SudokuCell(puzzleSize.getPuzzleWidth(), puzzleSize);
                 cells[i][j].setCellLocation(new Point(i,j));
             }
         }
     }
 
     public void init() {
-        for (int i = 0; i < puzzleWidth; i++) {
-            for (int j = 0; j < puzzleWidth; j++) {
-                cells[i][j].init(puzzleWidth);
+        for (int i = 0; i < puzzleSize.getPuzzleWidth(); i++) {
+            for (int j = 0; j < puzzleSize.getPuzzleWidth(); j++) {
+                cells[i][j].init(puzzleSize.getPuzzleWidth());
             }
         }
     }
@@ -57,7 +65,7 @@ public class SudokuPuzzle {
 
 
     public int getDrawWidth() {
-        return drawWidth;
+        return puzzleSize.getDrawWidth();
     }
 
     public boolean isSetValues() {
@@ -75,21 +83,21 @@ public class SudokuPuzzle {
      */
     public void draw(Graphics g){
         int x = 0;
-        for(int i = 0; i<puzzleWidth; i++){
+        for(int i = 0; i<puzzleSize.getPuzzleWidth(); i++){
             int y = 0;
-            for (int j = 0; j < puzzleWidth; j++) {
-                Rectangle r = new Rectangle(x, y, drawWidth, drawWidth);
+            for (int j = 0; j < puzzleSize.getPuzzleWidth(); j++) {
+                Rectangle r = new Rectangle(x, y, puzzleSize.getDrawWidth(), puzzleSize.getDrawWidth());
                 cells[i][j].setBounds(r);
-                cells[i][j].draw(g, x, y, drawWidth, cellPosition[i][j]);
-                y+=drawWidth;
+                cells[i][j].draw(g, x, y, puzzleSize.getDrawWidth(), cellPosition[i][j]);
+                y+=puzzleSize.getDrawWidth();
             }
-            x+=drawWidth;
+            x+=puzzleSize.getDrawWidth();
         }
     }
 
     public SudokuCell getSudokuCellLocation(Point point) {
-        for(int i = 0; i < puzzleWidth; i++){
-            for(int j = 0; j < puzzleWidth; j++){
+        for(int i = 0; i < puzzleSize.getPuzzleWidth(); i++){
+            for(int j = 0; j < puzzleSize.getPuzzleWidth(); j++){
                 if(cells[i][j].contains(point)){
                     return cells[i][j];
                 }
@@ -104,19 +112,19 @@ public class SudokuPuzzle {
     }
 
     public int getPuzzleWidth() {
-        return puzzleWidth;
+        return puzzleSize.getPuzzleWidth();
     }
 
     public boolean isValid(){
-        int sqrtOfPuzzleWidth = (int)Math.sqrt(puzzleWidth);
+        int sqrtOfPuzzleWidth = (int)Math.sqrt(puzzleSize.getPuzzleWidth());
         boolean[][] unitAccum = null;
-        for (int x = 0; x < puzzleWidth; x++) {
+        for (int x = 0; x < puzzleSize.getPuzzleWidth(); x++) {
             if(x%sqrtOfPuzzleWidth == 0){
-                unitAccum = new boolean[sqrtOfPuzzleWidth][puzzleWidth];
+                unitAccum = new boolean[sqrtOfPuzzleWidth][puzzleSize.getPuzzleWidth()];
             }
-            boolean[] accumColumn = new boolean[puzzleWidth];
-            boolean[] accumRow = new boolean[puzzleWidth];
-            for (int y = 0; y < puzzleWidth; y++) {
+            boolean[] accumColumn = new boolean[puzzleSize.getPuzzleWidth()];
+            boolean[] accumRow = new boolean[puzzleSize.getPuzzleWidth()];
+            for (int y = 0; y < puzzleSize.getPuzzleWidth(); y++) {
                 try{
                     int valueRow = cells[x][y].getValue();
                     int valueColumn = cells[y][x].getValue();
@@ -147,8 +155,8 @@ public class SudokuPuzzle {
 
 
     public void printPuzzel(){
-        for (int i = 0; i < puzzleWidth; i++) {
-            for (int j = 0; j < puzzleWidth; j++) {
+        for (int i = 0; i < puzzleSize.getPuzzleWidth(); i++) {
+            for (int j = 0; j < puzzleSize.getPuzzleWidth(); j++) {
                 System.out.print(cells[i][j].getValue() + " ");
             }
             System.out.print("\n");
@@ -158,7 +166,7 @@ public class SudokuPuzzle {
 
     public HashSet<Integer> getValuesInUnitContainingCell(int x, int y){
         HashSet<Integer> res = new HashSet<>();
-        int sqrtOfPuzzleWidth = (int)Math.sqrt(puzzleWidth);
+        int sqrtOfPuzzleWidth = (int)Math.sqrt(puzzleSize.getPuzzleWidth());
         int startX = (x/sqrtOfPuzzleWidth)*sqrtOfPuzzleWidth;
         int startY = (y/sqrtOfPuzzleWidth)*sqrtOfPuzzleWidth;
         for(int i = startX; i<startX+sqrtOfPuzzleWidth;i++){
@@ -175,7 +183,7 @@ public class SudokuPuzzle {
         if(values.size() == 1){
             return values;
         }
-        for(int i = 0; i<puzzleWidth; i++){
+        for(int i = 0; i<puzzleSize.getPuzzleWidth(); i++){
             values.remove(cells[i][y].getValue());
             values.remove(cells[x][i].getValue());
         }
@@ -184,8 +192,10 @@ public class SudokuPuzzle {
         return values;
     }
 
-    public static void setPuzzleSize(SudokuPuzzleSize puzzleSize) {
-        PUZZLE_SIZE = puzzleSize;
+    public void setPuzzleSize(SudokuPuzzleSize puzzleSize) {
+        this.puzzleSize = puzzleSize;
+        this.cellPosition = puzzleSize.getCellPositions();
+        set();
     }
 
     public boolean isSetCell(int x, int y){
@@ -194,6 +204,10 @@ public class SudokuPuzzle {
 
     public void setValueForCell(int value, int x, int y){
         cells[x][y].setValue(value);
+    }
+
+    public SudokuPuzzleSize getPuzzelSize(){
+        return this.puzzleSize;
     }
 
 

@@ -87,4 +87,9 @@ public class SudokuFrame {
     public void repaintSudokuPanel(){
         sudokuPanel.repaint();
     }
+
+    public void setModel(SudokuPuzzle model) {
+        this.model = model;
+
+    }
 }

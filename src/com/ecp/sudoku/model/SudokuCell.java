@@ -15,6 +15,7 @@ public class SudokuCell {
 
     private int value;
     private int maxValue;
+    private SudokuPuzzleSize puzzleSize;
 
     private Rectangle bounds; //This is the square that the suduko cell occupys
 
@@ -22,7 +23,8 @@ public class SudokuCell {
 
     private  HashSet<Integer> setOfAllPossibleValues;
 
-    public SudokuCell(int maxValue) {
+    public SudokuCell(int maxValue, SudokuPuzzleSize puzzleSize) {
+        this.puzzleSize = puzzleSize;
         init(maxValue);
     }
 
@@ -140,7 +142,7 @@ public class SudokuCell {
 
     private BufferedImage createImage(Font font, FontRenderContext frc,
                                       int width, String s) {
-        int margin = (int) (0.075 * SudokuPuzzle.PUZZLE_SIZE.getDrawWidth());
+        int margin = (int) (0.075 * this.puzzleSize.getDrawWidth());
         double extra = (double) margin + margin;
 
         Font largeFont = font.deriveFont((float) (width * 1 / 2));
