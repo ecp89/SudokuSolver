@@ -1,0 +1,17 @@
+#Command used to make PUZZLES table
+create table PUZZLES(
+puzzle_id INT NOT NULL AUTO_INCREMENT,
+puzzle TEXT NOT NULL,
+solution TEXT,
+rating TEXT,
+creation_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+primary key(puzzle_id)
+);
+
+LOAD DATA INFILE '/Users/ericpass/IdeaProjects/AIPracticumProject/src/database_misc/simple_sol2.csv'
+INTO TABLE PUZZLES
+FIELDS TERMINATED BY ','
+LINES TERMINATED BY '\n'
+IGNORE 1 LINES
+(puzzle, solution, solution_count)
+SET rating = 'Simple'

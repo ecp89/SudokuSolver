@@ -16,6 +16,11 @@ public class NaiveSolver implements SudokuSolver{
         System.out.println("we done");
     }
 
+    @Override
+    public String getName() {
+        return "NaiveSolverV1";
+    }
+
     private boolean naiveSolverHelper(SudokuPuzzle model, SudokuFrame frame, int index) {
         final int width = model.getPuzzleWidth();
 
@@ -43,4 +48,5 @@ public class NaiveSolver implements SudokuSolver{
         return false;
 
     }
+
 }

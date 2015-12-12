@@ -14,4 +14,6 @@ public interface SudokuSolver {
      * @param model
      */
     void SolvePuzzle(SudokuPuzzle model, SudokuFrame frame);
+
+    String getName();
 }
