@@ -1,10 +1,8 @@
 package com.ecp.sudoku.view;
 
 import com.ecp.sudoku.controller.ToggleListener;
-import com.ecp.sudoku.model.SudokuPuzzle;
-import com.ecp.sudoku.model.SudokuPuzzleSize;
+import com.ecp.sudoku.model.*;
 import com.ecp.sudoku.solvers.NaiveSolver;
-import javafx.scene.control.ComboBox;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -12,7 +10,7 @@ import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Arrays;
+import java.sql.SQLException;
 
 /**
  * Created by ericpass on 10/26/15.
@@ -24,9 +22,11 @@ public class ButtonPanel {
 
     private JToggleButton restPuzzleButton;
     private JToggleButton setValuesButton;
-    private JButton validateButton;
-
     private JComboBox sizeDropDown;
+    private JButton solveButton;
+    private JButton loadButton;
+
+
 
     private JPanel panel;
 
@@ -100,9 +100,34 @@ public class ButtonPanel {
 
         addComponent(panel, sizeDropDown, 0, gridy++, 1, 1, buttonInsets, GridBagConstraints.LINE_START, GridBagConstraints.HORIZONTAL);
 
+        loadButton = new JButton("Load Puzzle");
+        loadButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    PuzzleEntity entity = DatabaseManagerSingleton.getRandomPuzzel(SudokuDifficulty.SIMPLE);
+                    if(entity == null) {
+                        return;
+                    }
+                    restPuzzleButton.doClick();
+                    model.loadPuzzleFromEntity(entity);
+                    frame.repaintSudokuPanel();
+                } catch (SQLException e1) {
+                    System.err.println("DB error when trying to load puzzle");
+                    e1.printStackTrace();
+                }
 
-        validateButton = new JButton("Solve");
-        validateButton.addActionListener(new ActionListener() {
+            }
+
+
+        });
+        loadButton.setSelected(false);
+
+        addComponent(panel, loadButton, 0, gridy++, 1, 1, buttonInsets, GridBagConstraints.LINE_START, GridBagConstraints.HORIZONTAL);
+
+
+        solveButton = new JButton("Solve");
+        solveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 NaiveSolver solver = new NaiveSolver();
@@ -110,11 +135,10 @@ public class ButtonPanel {
             }
 
 
-
         });
-        validateButton.setSelected(false);
+        solveButton.setSelected(false);
 
-        addComponent(panel, validateButton, 0, gridy++, 1, 1, buttonInsets, GridBagConstraints.LINE_START, GridBagConstraints.HORIZONTAL);
+        addComponent(panel, solveButton, 0, gridy++, 1, 1, buttonInsets, GridBagConstraints.LINE_START, GridBagConstraints.HORIZONTAL);
 
 
 

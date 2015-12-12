@@ -19,6 +19,8 @@ public class SudokuPuzzle {
 
     private int[][] cellPosition;
 
+    private PuzzleEntity entity;
+
     public SudokuPuzzle(){
         this(null);
     }
@@ -59,6 +61,7 @@ public class SudokuPuzzle {
         for(int i = 0; i<values.length; i++){
             for (int j = 0; j < values.length; j++) {
                 cells[i][j].setValue(values[i][j]);
+                cells[i][j].setIsInitial(true);
             }
         }
     }
@@ -210,5 +213,9 @@ public class SudokuPuzzle {
         return this.puzzleSize;
     }
 
+    public void loadPuzzleFromEntity(PuzzleEntity entity){
+        this.entity = entity;
+        bulkSetValues(this.entity.getPuzzle());
+    }
 
 }

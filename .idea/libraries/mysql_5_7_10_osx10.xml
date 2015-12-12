@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="mysql-5.7.10-osx10">
+    <CLASSES />
+    <JAVADOC />
+    <SOURCES>
+      <root url="file:///usr/local/mysql-5.7.10-osx10.9-x86_64" />
+    </SOURCES>
+  </library>
+</component>

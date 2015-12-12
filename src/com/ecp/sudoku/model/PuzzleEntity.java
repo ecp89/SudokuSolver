@@ -17,12 +17,22 @@ public class PuzzleEntity {
     private final Timestamp timestamp;
 
     public PuzzleEntity(ResultSet rs) throws SQLException {
+        if(rs.next()){
+            this.puzzleId = rs.getInt("puzzle_id");
+            this.puzzleStr = rs.getString("puzzle");
+            this.puzzleSolution = rs.getString("solution");
+            this.puzzleRating = rs.getString("rating");
+            this.timestamp = rs.getTimestamp("creation_time");
+            System.out.println("Generated "+this.toString());
+        } else {
+            this.puzzleId = -1;
+            this.puzzleStr = null;
+            this.puzzleSolution = null;
+            this.puzzleRating = null;
+            this.timestamp = null;
+            System.err.println("What is happening in PuzzleEntity");
+        }
 
-        this.puzzleId = rs.getInt("puzzleId");
-        this.puzzleStr = rs.getString("puzzle");
-        this.puzzleSolution = rs.getString("solution");
-        this.puzzleRating = rs.getString("rating");
-        this.timestamp = rs.getTimestamp("creation_time");
 
     }
     public PuzzleEntity(String puzzleStr){
@@ -90,5 +100,14 @@ public class PuzzleEntity {
         return stringBuilder.toString();
     }
 
-
+    @Override
+    public String toString() {
+        return "PuzzleEntity{" +
+                "puzzleId=" + puzzleId +
+                ", puzzleStr='" + puzzleStr + '\'' +
+                ", puzzleSolution='" + puzzleSolution + '\'' +
+                ", puzzleRating='" + puzzleRating + '\'' +
+                ", timestamp=" + timestamp +
+                '}';
+    }
 }
