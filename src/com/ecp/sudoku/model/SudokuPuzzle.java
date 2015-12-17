@@ -21,6 +21,8 @@ public class SudokuPuzzle {
 
     private PuzzleEntity entity;
 
+    private SudokuDifficulty difficulty = SudokuDifficulty.SIMPLE;
+
     /**
      * This is the default constructor so since no size was specified
      * fall back to using the default size;
@@ -112,6 +114,10 @@ public class SudokuPuzzle {
         }
 
         return null;
+    }
+
+    public SudokuCell getSudokuCell(int row, int col){
+        return this.cells[row][col];
     }
 
     public void setSetValues(boolean isSetValues) {
@@ -221,5 +227,24 @@ public class SudokuPuzzle {
         this.entity = entity;
         bulkSetValues(this.entity.getPuzzle());
     }
+
+    public SudokuDifficulty getDifficulty() {
+        return this.difficulty;
+    }
+
+    public void setDifficulty(SudokuDifficulty difficulty){
+        this.difficulty = difficulty;
+    }
+
+    public void setIsInitialForCell(boolean isInitial, int row, int col){
+        this.cells[row][col].setIsInitial(isInitial)
+        ;
+    }
+
+    public void setSudokuCell(SudokuCell cell, int row, int col){
+        this.cells[row][col] = cell;
+    }
+
+
 
 }

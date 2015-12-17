@@ -36,13 +36,22 @@ public enum SudokuDifficulty {
         return null;
     }
 
-    public static String[] getAllSupportedDiffulties(){
+    public static String[] getAllSupportedDifficulties(){
         SudokuDifficulty[] difficulties = SudokuDifficulty.values();
         String[] res = new String[difficulties.length];
         for (int i = 0; i < difficulties.length; i++) {
             res[i] = difficulties[i].displayString;
         }
         return res;
+    }
+
+    public static SudokuDifficulty getByDisplayName(String displayString){
+        for(SudokuDifficulty difficulty: SudokuDifficulty.values()){
+            if(difficulty.displayString.equals(displayString)){
+                return difficulty;
+            }
+        }
+        throw new IllegalArgumentException();
     }
 
 

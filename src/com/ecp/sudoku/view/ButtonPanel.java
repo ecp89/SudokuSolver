@@ -32,6 +32,9 @@ public class ButtonPanel {
     private JComboBox difficultyDropDown;
     private JButton loadButton;
 
+    private JTextField numberOfBoxesToRemove;
+    private JButton generateButton;
+
 
 
     private JPanel panel;
@@ -130,7 +133,19 @@ public class ButtonPanel {
         JPanel dummy1 =new JPanel();
         addComponent(panel, dummy1, 0, gridy++, 1, 1, buttonInsets, GridBagConstraints.LINE_START, GridBagConstraints.HORIZONTAL);
 
-        difficultyDropDown = new JComboBox(SudokuDifficulty.getAllSupportedDiffulties());
+        difficultyDropDown = new JComboBox(SudokuDifficulty.getAllSupportedDifficulties());
+        difficultyDropDown.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JComboBox cb = (JComboBox) e.getSource();
+                String difficulty = (String)cb.getSelectedItem();
+                try{
+                    model.setDifficulty(SudokuDifficulty.getByDisplayName(difficulty));
+                } catch (IllegalArgumentException excpt){
+                    System.err.println("No valid difficulty?");
+                }
+            }
+        });
         addComponent(panel, difficultyDropDown, 0, gridy++, 1, 1, buttonInsets, GridBagConstraints.LINE_START, GridBagConstraints.HORIZONTAL);
 
         loadButton = new JButton("Load Puzzle");
@@ -138,7 +153,7 @@ public class ButtonPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    PuzzleEntity entity = DatabaseManagerSingleton.getRandomPuzzel(SudokuDifficulty.SIMPLE);
+                    PuzzleEntity entity = DatabaseManagerSingleton.getRandomPuzzel(model.getDifficulty());
                     if(entity == null) {
                         return;
                     }
@@ -157,6 +172,33 @@ public class ButtonPanel {
         loadButton.setSelected(false);
 
         addComponent(panel, loadButton, 0, gridy++, 1, 1, buttonInsets, GridBagConstraints.LINE_START, GridBagConstraints.HORIZONTAL);
+
+        JPanel dummy2 =new JPanel();
+        addComponent(panel, dummy2, 0, gridy++, 1, 1, buttonInsets, GridBagConstraints.LINE_START, GridBagConstraints.HORIZONTAL);
+
+        numberOfBoxesToRemove = new JTextField();
+        addComponent(panel, numberOfBoxesToRemove, 0, gridy++, 1, 1, buttonInsets, GridBagConstraints.LINE_START, GridBagConstraints.HORIZONTAL);
+
+        generateButton = new JButton("Generate");
+        generateButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                restPuzzleButton.doClick();
+                int i = 0;
+                try {
+                    i = Integer.parseInt(numberOfBoxesToRemove.getText());
+                } catch (NumberFormatException excpt){
+                    System.err.println("Come on and enter a number");
+                }
+                Generator.generate(model, i);
+                frame.repaintSudokuPanel();
+            }
+        });
+
+        addComponent(panel, generateButton, 0, gridy++, 1, 1, buttonInsets, GridBagConstraints.LINE_START, GridBagConstraints.HORIZONTAL);
+
+
+
 
 
 

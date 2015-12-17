@@ -5,7 +5,7 @@ import com.ecp.sudoku.view.SudokuFrame;
 
 /**
  * Created by ericpass on 12/8/15.
- * Just do a DFS search
+ * Just do a backtrack search
  */
 public class NaiveSolver extends SudokuSolver{
 

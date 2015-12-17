@@ -8,6 +8,7 @@ package com.ecp.sudoku;
 
 import com.ecp.sudoku.model.SudokuDifficulty;
 import com.ecp.sudoku.model.SudokuPuzzle;
+import com.ecp.sudoku.solvers.NaiveSolver;
 import com.ecp.sudoku.solvers.SolverContext;
 import com.ecp.sudoku.solvers.SudokuSolver;
 import com.ecp.sudoku.view.SudokuFrame;
@@ -65,10 +66,10 @@ public class GUIMainRunner implements Runnable{
                     }
                     String aiName = arg.substring(aiNameArg.length());
                     try{
-                        Class aiClass = Class.forName(aiName);
+                        Class aiClass = Class.forName("com.ecp.sudoku.solvers."+aiName);
                         solver = (SudokuSolver)aiClass.newInstance();
                     } catch (ClassNotFoundException e) {
-                        System.err.println("Cannot find ai.");
+                        System.err.printf("Cannot find ai. %s\n",aiName);
                         System.exit(1);
                     } catch (InstantiationException| IllegalAccessException e) {
                         System.err.println("An error occurred with making ai");
