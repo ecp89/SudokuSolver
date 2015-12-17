@@ -3,6 +3,8 @@ package com.ecp.sudoku.view;
 import com.ecp.sudoku.controller.ToggleListener;
 import com.ecp.sudoku.model.*;
 import com.ecp.sudoku.solvers.NaiveSolver;
+import com.ecp.sudoku.solvers.SolvedPuzzleStatistics;
+import com.ecp.sudoku.solvers.SudokuSolver;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -23,7 +25,11 @@ public class ButtonPanel {
     private JToggleButton restPuzzleButton;
     private JToggleButton setValuesButton;
     private JComboBox sizeDropDown;
+
+    private JComboBox solverDropDown;
     private JButton solveButton;
+
+    private JComboBox difficultyDropDown;
     private JButton loadButton;
 
 
@@ -49,7 +55,7 @@ public class ButtonPanel {
 
         ToggleListener toggleListener = new ToggleListener();
 
-        restPuzzleButton = new JToggleButton("Reset Button");
+        restPuzzleButton = new JToggleButton("Reset");
         restPuzzleButton.addChangeListener(toggleListener);
         restPuzzleButton.addChangeListener(new ChangeListener() {
             @Override
@@ -96,9 +102,36 @@ public class ButtonPanel {
                 restPuzzleButton.doClick();
             }
         });
-        sizeDropDown.setSelectedIndex(model.getPuzzelSize().ordinal());
+        sizeDropDown.setSelectedIndex(model.getPuzzleSize().ordinal());
 
         addComponent(panel, sizeDropDown, 0, gridy++, 1, 1, buttonInsets, GridBagConstraints.LINE_START, GridBagConstraints.HORIZONTAL);
+
+
+        JPanel dummy =new JPanel();
+        addComponent(panel, dummy, 0, gridy++, 1, 1, buttonInsets, GridBagConstraints.LINE_START, GridBagConstraints.HORIZONTAL);
+
+        solverDropDown = new JComboBox(SudokuSolver.getAllSupportedSolvers());
+        addComponent(panel, solverDropDown, 0, gridy++, 1, 1, buttonInsets, GridBagConstraints.LINE_START, GridBagConstraints.HORIZONTAL);
+
+        solveButton = new JButton("Solve");
+        solveButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                NaiveSolver solver = new NaiveSolver();
+                SolvedPuzzleStatistics stats = solver.SolvePuzzle(model, frame);
+                System.out.println(stats);
+            }
+
+
+        });
+        solveButton.setSelected(false);
+        addComponent(panel, solveButton, 0, gridy++, 1, 1, buttonInsets, GridBagConstraints.LINE_START, GridBagConstraints.HORIZONTAL);
+
+        JPanel dummy1 =new JPanel();
+        addComponent(panel, dummy1, 0, gridy++, 1, 1, buttonInsets, GridBagConstraints.LINE_START, GridBagConstraints.HORIZONTAL);
+
+        difficultyDropDown = new JComboBox(SudokuDifficulty.getAllSupportedDiffulties());
+        addComponent(panel, difficultyDropDown, 0, gridy++, 1, 1, buttonInsets, GridBagConstraints.LINE_START, GridBagConstraints.HORIZONTAL);
 
         loadButton = new JButton("Load Puzzle");
         loadButton.addActionListener(new ActionListener() {
@@ -124,22 +157,6 @@ public class ButtonPanel {
         loadButton.setSelected(false);
 
         addComponent(panel, loadButton, 0, gridy++, 1, 1, buttonInsets, GridBagConstraints.LINE_START, GridBagConstraints.HORIZONTAL);
-
-
-        solveButton = new JButton("Solve");
-        solveButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                NaiveSolver solver = new NaiveSolver();
-                solver.SolvePuzzle(model, frame);
-            }
-
-
-        });
-        solveButton.setSelected(false);
-
-        addComponent(panel, solveButton, 0, gridy++, 1, 1, buttonInsets, GridBagConstraints.LINE_START, GridBagConstraints.HORIZONTAL);
-
 
 
 

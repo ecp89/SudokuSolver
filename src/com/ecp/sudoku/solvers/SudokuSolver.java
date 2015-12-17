@@ -6,14 +6,29 @@ import com.ecp.sudoku.view.SudokuFrame;
 /**
  * Created by ericpass on 12/8/15.
  */
-public interface SudokuSolver {
+public abstract class SudokuSolver {
 
     /**
      * Solves the prefilled in model returning when all of
      * the model is filled in in a valid sudoku
      * @param model
      */
-    void SolvePuzzle(SudokuPuzzle model, SudokuFrame frame);
+    //TODO This should probably return some stat object like time taken to
+    //solve nodes need to evaluate ect
+    public abstract SolvedPuzzleStatistics SolvePuzzle(SudokuPuzzle model, SudokuFrame frame);
 
-    String getName();
+    public abstract SolvedPuzzleStatistics SolvePuzzle(SudokuPuzzle model);
+
+    public abstract String getName();
+
+    public static String[] getAllSupportedSolvers(){
+        String[] solvers = new String[2];
+        solvers[0] = "NaiveSolver";
+        solvers[1] = "DancingLinks";
+        return solvers;
+
+    }
+
+
+
 }

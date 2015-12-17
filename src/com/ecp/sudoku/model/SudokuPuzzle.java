@@ -9,7 +9,7 @@ import java.util.HashSet;
 //TODO this might/should be a singleton
 public class SudokuPuzzle {
 
-    protected static SudokuPuzzleSize DEFAULT_PUZZLE_SIZE = SudokuPuzzleSize.NINE_BY_NINE;
+    protected static final SudokuPuzzleSize DEFAULT_PUZZLE_SIZE = SudokuPuzzleSize.NINE_BY_NINE;
 
     private SudokuPuzzleSize puzzleSize = DEFAULT_PUZZLE_SIZE;
 
@@ -21,6 +21,10 @@ public class SudokuPuzzle {
 
     private PuzzleEntity entity;
 
+    /**
+     * This is the default constructor so since no size was specified
+     * fall back to using the default size;
+     */
     public SudokuPuzzle(){
         this(null);
     }
@@ -61,7 +65,7 @@ public class SudokuPuzzle {
         for(int i = 0; i<values.length; i++){
             for (int j = 0; j < values.length; j++) {
                 cells[i][j].setValue(values[i][j]);
-                cells[i][j].setIsInitial(true);
+                cells[i][j].setIsInitial(values[i][j]!=0);
             }
         }
     }
@@ -209,7 +213,7 @@ public class SudokuPuzzle {
         cells[x][y].setValue(value);
     }
 
-    public SudokuPuzzleSize getPuzzelSize(){
+    public SudokuPuzzleSize getPuzzleSize(){
         return this.puzzleSize;
     }
 

@@ -48,10 +48,9 @@ public class PuzzleEntityTest {
     @Test
     public void testConvertToString() throws Exception {
         String res = puzzleEntity1.convertToString(expectedEntity1);
-        assertEquals(entity1Puzzle, res);
+        assertEquals(entity1Puzzle, res);}
     }
 
 
 
 
-}

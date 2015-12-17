@@ -8,13 +8,13 @@ creation_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 primary key(puzzle_id)
 );
 
-LOAD DATA INFILE '/Users/ericpass/IdeaProjects/AIPracticumProject/src/database_misc/simple_sol2.csv'
+LOAD DATA INFILE '/Users/ericpass/IdeaProjects/AIPracticumProject/src/database_misc/intermediate_puzzlesV1.csv'
 INTO TABLE PUZZLES
 FIELDS TERMINATED BY ','
 LINES TERMINATED BY '\n'
 IGNORE 1 LINES
 (puzzle, solution, solution_count)
-SET rating = 'Simple'
+SET rating = 'Intermediate'
 
 alter table PUZZLES add size INT AFTER rating Default 9;
 

@@ -23,17 +23,26 @@ public enum SudokuDifficulty {
     }
 
     public static SudokuDifficulty getForDisplayString(String str){
-        if(str.equals(ANY.displayString)){
+        if(str.equalsIgnoreCase(ANY.displayString)){
             SudokuDifficulty[] vals = SudokuDifficulty.values();
             return vals[(int)Math.random()*(vals.length-1)];
         }
         for(SudokuDifficulty difficulty: SudokuDifficulty.values()){
-            if(difficulty.displayString.equals(str)){
+            if(difficulty.displayString.equalsIgnoreCase(str)){
                 return difficulty;
             }
         }
         System.err.println("NO MATCHING SUDOKU DIFFICULTY");
         return null;
+    }
+
+    public static String[] getAllSupportedDiffulties(){
+        SudokuDifficulty[] difficulties = SudokuDifficulty.values();
+        String[] res = new String[difficulties.length];
+        for (int i = 0; i < difficulties.length; i++) {
+            res[i] = difficulties[i].displayString;
+        }
+        return res;
     }
 
 
