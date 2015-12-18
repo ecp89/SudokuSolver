@@ -138,6 +138,7 @@ public class ButtonPanel {
 
         addComponent(panel, solverDropDown, 0, gridy++, 1, 1, buttonInsets, GridBagConstraints.LINE_START, GridBagConstraints.HORIZONTAL);
 
+        //TODO make solver a SwingWorker
         solveButton = new JButton("Solve");
         solveButton.addActionListener(new ActionListener() {
             @Override

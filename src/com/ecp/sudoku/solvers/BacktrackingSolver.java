@@ -32,20 +32,22 @@ public class BacktrackingSolver extends SudokuSolver {
         int row = index / width;
         int col = index % width;
         if(model.isSetCell(row,col)){
-            solverHelper(model, frame, index+1);
-        }
-        for (int i = 1; i <= width; i++) {
-            if(doesNotConflict(model, i, row, col)){
-                model.setValueForCell(i, row, col);
-                if(frame != null){
-                    frame.repaintSudokuPanel();
+            return solverHelper(model, frame, index+1);
+        } else {
+            for (int i = 1; i <= width; i++) {
+                if(doesNotConflict(model, i, row, col)){
+                    model.setValueForCell(i, row, col);
+                    if(frame != null){
+                        frame.repaintSudokuPanel();
+                    }
+                    if(solverHelper(model,frame,index+1)){
+                        return true;
+                    }
+                    model.setValueForCell(0,row,col);
                 }
-                if(solverHelper(model,frame,index+1)){
-                    return true;
-                }
-                model.setValueForCell(0,row,col);
             }
         }
+
         return false;
 
     }

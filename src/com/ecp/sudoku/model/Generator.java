@@ -8,8 +8,17 @@ import java.util.*;
 public class Generator {
     private static final Random random = new Random();
 
-    public static void generate(SudokuPuzzle model, int numberOfRemovals){
+    public static void generate(SudokuPuzzle model, int numberOfCluesLeft){
         randomSolve(model);
+        final int width = model.getPuzzleWidth();
+        final int upperIndex = width*width;
+        int numberOfRemovals = upperIndex - numberOfCluesLeft;
+        createHolesRandomly(model, numberOfRemovals);
+
+
+    }
+
+    private static void createHolesRandomly(SudokuPuzzle model, int numberOfRemovals){
         final int width = model.getPuzzleWidth();
         final int upperIndex = width*width;
         int randomIndex = 0;
@@ -28,7 +37,18 @@ public class Generator {
         }
     }
 
+    /**
+     * Distribute numberOfHoles to keep the number of
+     * @param model
+     * @param numberOfRemovals
+     */
+    private static void createHolesSinglyBalanced(SudokuPuzzle model, int numberOfRemovals){
 
+    }
+
+    private static void isBlanaced(){
+
+    }
 
     private static boolean randomSolveHelper(SudokuPuzzle model, int index){
         final int width = model.getPuzzleWidth();

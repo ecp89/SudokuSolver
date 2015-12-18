@@ -16,7 +16,7 @@ public class PrioritySolver extends SudokuSolver {
     Queue<PrioritySudokuCell> solvedQueue;
 
     @Override
-    public long setUp(SudokuPuzzle model){
+    protected long setUp(SudokuPuzzle model){
         super.setUp(model);
         unsolvedQueue = new PriorityQueue<PrioritySudokuCell>();
         solvedQueue = new LinkedList<PrioritySudokuCell>();
@@ -25,7 +25,7 @@ public class PrioritySolver extends SudokuSolver {
     }
 
     @Override
-    public SolvedPuzzleStatistics tearDown(long startTime){
+    protected SolvedPuzzleStatistics tearDown(long startTime){
         SolvedPuzzleStatistics res = super.tearDown(startTime);
         unsolvedQueue = null;
         solvedQueue = null;
@@ -38,8 +38,12 @@ public class PrioritySolver extends SudokuSolver {
         solveHelper(model, frame);
         return tearDown(startTime);
     }
-
+    private int count = 0;
     private boolean solveHelper(SudokuPuzzle model, SudokuFrame frame) {
+        count++;
+        if(count%1000 == 0){
+            model.printPuzzel();
+        }
         stats.numberOfNodesExplored ++;
         if(unsolvedQueue.size() == 0){
             return model.isValid();
@@ -51,7 +55,7 @@ public class PrioritySolver extends SudokuSolver {
         }
         int row = currentCell.getCellRow();
         int col = currentCell.getCellCol();
-
+        stats.numberOfNodesExplored += nodesExploredForGettingValidMoves(model.getPuzzleSize());
         for(Integer val: model.getValidValuesForCell(row, col)){
             model.setValueForCell(val, row, col);
             if(frame != null){

@@ -4,6 +4,8 @@ import com.ecp.sudoku.model.SudokuPuzzle;
 import com.ecp.sudoku.model.SudokuPuzzleSize;
 import com.ecp.sudoku.view.SudokuFrame;
 
+import java.util.List;
+
 /**
  * Created by ericpass on 12/8/15.
  */
@@ -22,10 +24,11 @@ public abstract class SudokuSolver {
     public abstract String getName();
 
     public static String[] getAllSupportedSolvers(){
-        String[] solvers = new String[3];
+        String[] solvers = new String[4];
         solvers[0] = "ForwardCheckingSolver";
         solvers[1] = "PrioritySolver";
         solvers[2] = "BacktrackingSolver";
+        solvers[3] = "HistogramSolver";
         return solvers;
 
     }
