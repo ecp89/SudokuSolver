@@ -4,6 +4,7 @@
 package com.ecp.sudoku.model;
 
 import java.awt.*;
+import java.util.Arrays;
 import java.util.HashSet;
 
 //TODO this might/should be a singleton
@@ -245,6 +246,16 @@ public class SudokuPuzzle {
         this.cells[row][col] = cell;
     }
 
+    public SudokuCell[][] getMemento(){
+        SudokuCell[][] res = new SudokuCell[getPuzzleWidth()][getPuzzleWidth()];
+        for (int i = 0; i < res.length; i++) {
+            res[i] = Arrays.copyOf(cells[i], cells[i].length);
+        }
+        return res;
+    }
 
+    public void restoreFromMemento(SudokuCell[][] cells){
+        this.cells = cells;
+    }
 
 }

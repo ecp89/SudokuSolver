@@ -24,11 +24,12 @@ public abstract class SudokuSolver {
     public abstract String getName();
 
     public static String[] getAllSupportedSolvers(){
-        String[] solvers = new String[4];
+        String[] solvers = new String[5];
         solvers[0] = "ForwardCheckingSolver";
         solvers[1] = "PrioritySolver";
         solvers[2] = "BacktrackingSolver";
         solvers[3] = "HistogramSolver";
+        solvers[4] = "CSPSolver";
         return solvers;
 
     }
