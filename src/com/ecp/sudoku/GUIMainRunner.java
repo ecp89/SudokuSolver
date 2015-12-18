@@ -8,7 +8,6 @@ package com.ecp.sudoku;
 
 import com.ecp.sudoku.model.SudokuDifficulty;
 import com.ecp.sudoku.model.SudokuPuzzle;
-import com.ecp.sudoku.solvers.NaiveSolver;
 import com.ecp.sudoku.solvers.SolverContext;
 import com.ecp.sudoku.solvers.SudokuSolver;
 import com.ecp.sudoku.view.SudokuFrame;
@@ -26,6 +25,8 @@ import javax.swing.SwingUtilities;
  *   Interchangable models for how puzzle abstracted (arrays, linked list, double linked, graph, tree ect)
  *   Stat collection mode
  *   Strategy head to head mode
+ *
+ *   ALL THE ROW AND COL STUFF IS WRONG
  */
 
 

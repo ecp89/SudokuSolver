@@ -31,7 +31,7 @@ public class SudokuFrame {
         buttonPanel = new ButtonPanel(this, model);
         
         frame = new JFrame();
-        frame.setTitle("Sudoku Puzzle NaiveSolver By Eric Pass");
+        frame.setTitle("Sudoku Puzzle ForwardCheckingSolver By Eric Pass");
         frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         frame.addWindowListener(new WindowAdapter() {
             @Override

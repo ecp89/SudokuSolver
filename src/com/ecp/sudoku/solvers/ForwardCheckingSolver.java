@@ -8,26 +8,12 @@ import java.util.PriorityQueue;
 
 /**
  * Created by ericpass on 12/8/15.
- * Just do a backtrack search
+ * Just do a backtrack search with forward checking
  */
-public class NaiveSolver extends SudokuSolver{
+public class ForwardCheckingSolver extends SudokuSolver{
 
 
-    SolvedPuzzleStatistics stats;
 
-    public long setUp(SudokuPuzzle model){
-        stats= new SolvedPuzzleStatistics();
-        stats.solverName = getName();
-        return System.nanoTime();
-    }
-
-    public SolvedPuzzleStatistics tearDown(long startTime){
-        long endTime = System.nanoTime();
-        stats.timeTaken = endTime - startTime;
-        SolvedPuzzleStatistics res = stats;
-        stats = null;
-        return res;
-    }
 
 
     @Override
@@ -40,7 +26,7 @@ public class NaiveSolver extends SudokuSolver{
 
     @Override
     public String getName() {
-        return "NaiveSolver";
+        return "ForwardCheckingSolver";
     }
 
     private boolean naiveSolverHelper(SudokuPuzzle model, SudokuFrame frame, int index, SolvedPuzzleStatistics stats) {
@@ -59,6 +45,7 @@ public class NaiveSolver extends SudokuSolver{
         if(model.isSetCell(row,col)) {
            return naiveSolverHelper(model,frame,index+1, stats);
         } else {
+            stats.numberOfNodesExplored +=this.nodesExploredForGettingValidMoves(model.getPuzzleSize());
             for(Integer validValue:model.getValidValuesForCell(row,col)){
                 model.setValueForCell(validValue, row, col);
                 if(frame != null){

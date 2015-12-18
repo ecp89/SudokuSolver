@@ -2,7 +2,7 @@ package com.ecp.sudoku.view;
 
 import com.ecp.sudoku.controller.ToggleListener;
 import com.ecp.sudoku.model.*;
-import com.ecp.sudoku.solvers.NaiveSolver;
+import com.ecp.sudoku.solvers.ForwardCheckingSolver;
 import com.ecp.sudoku.solvers.SolvedPuzzleStatistics;
 import com.ecp.sudoku.solvers.SudokuSolver;
 
@@ -45,7 +45,7 @@ public class ButtonPanel {
 
     private SudokuPuzzle model;
 
-    private SudokuSolver solver = new NaiveSolver();
+    private SudokuSolver solver = new ForwardCheckingSolver();
 
     public ButtonPanel(SudokuFrame sudokuFrame, SudokuPuzzle model) {
         this.frame = sudokuFrame;

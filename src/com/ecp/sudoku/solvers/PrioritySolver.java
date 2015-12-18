@@ -14,24 +14,21 @@ public class PrioritySolver extends SudokuSolver {
 
     PriorityQueue<PrioritySudokuCell> unsolvedQueue;
     Queue<PrioritySudokuCell> solvedQueue;
-    SolvedPuzzleStatistics stats;
 
+    @Override
     public long setUp(SudokuPuzzle model){
+        super.setUp(model);
         unsolvedQueue = new PriorityQueue<PrioritySudokuCell>();
         solvedQueue = new LinkedList<PrioritySudokuCell>();
-        stats= new SolvedPuzzleStatistics();
-        stats.solverName = getName();
         initQueues(model);
         return System.nanoTime();
     }
 
+    @Override
     public SolvedPuzzleStatistics tearDown(long startTime){
-        long endTime = System.nanoTime();
-        stats.timeTaken = endTime - startTime;
+        SolvedPuzzleStatistics res = super.tearDown(startTime);
         unsolvedQueue = null;
         solvedQueue = null;
-        SolvedPuzzleStatistics res = stats;
-        stats = null;
         return res;
     }
 
