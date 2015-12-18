@@ -40,9 +40,8 @@ public class PrioritySolver extends SudokuSolver {
     }
     private int count = 0;
     private boolean solveHelper(SudokuPuzzle model, SudokuFrame frame) {
-        count++;
-        if(count%1000 == 0){
-            model.printPuzzel();
+        if(shouldAbort()){
+            return true;
         }
         stats.numberOfNodesExplored ++;
         if(unsolvedQueue.size() == 0){

@@ -17,14 +17,16 @@ public class CSPSolver extends SudokuSolver {
 
     @Override
     protected long setUp(SudokuPuzzle model) {
+        long startTime = super.setUp(model);
         init(model);
-        return super.setUp(model);
+        return startTime;
     }
 
     private void init(SudokuPuzzle model){
         unsolvedCells = new PriorityQueue<>();
         final int width = model.getPuzzleWidth();
         for (int i = 0; i < width * width; i++) {
+            stats.numberOfNodesExplored++;
             int row =  i / width;
             int col = i % width;
             unsolvedCells.add(new CSPEntity(row, col, model.getValidValuesForCell(row,col)));
@@ -52,35 +54,47 @@ public class CSPSolver extends SudokuSolver {
     }
 
     private boolean cspHelper(SudokuPuzzle model, SudokuFrame frame){
+        if(shouldAbort()){
+            return true;
+        }
+        //Increase the number of nodes explored because we are visting this node
         stats.numberOfNodesExplored++;
+        //We have explored everything
         if(unsolvedCells.size() == 0){
             if(frame != null){
                 frame.repaintSudokuPanel();
             }
+            //sanity check that this is a valid puzzle
             return model.isValid();
         }
         CSPEntity currentEntity = unsolvedCells.poll();
+        //This was a given clue so skip it
         if(model.isSetCell(currentEntity.row,currentEntity.col)){
             return cspHelper(model,frame);
         } else {
+            //For each of the valid assignments
             for(Integer val: currentEntity.validValues){
+                //Get a memento of this state incase propagation fails and
+                //we need to revert everything
                 SudokuCell[][] memento = model.getMemento();
                 model.setValueForCell(val, currentEntity.row, currentEntity.col);
+                if(frame != null){
+                    frame.repaintSudokuPanel();
+                }
                 PriorityQueue<CSPEntity> effectedCells = getAllAffected(model, currentEntity);
                 boolean shouldRestore = false;
+                //until we have propagated all the updates
                 while(effectedCells.size() != 0){
+                    //Get a entity to update
                     CSPEntity currentEffected = effectedCells.poll();
+                    //There are no assignments for this and thus we cant solve
+                    //the puzzle with the current assignments so restore from
+                    //the memento and try a different assignment for this cell
                     if(currentEffected.validValues.size() == 0){
                         shouldRestore = true;
                         break;
                     }
-                    if(currentEffected.validValues.size() == 0){
-                        for(Integer singleEffected: currentEffected.validValues){
-                            model.setValueForCell(singleEffected, currentEffected.row,currentEffected.col);
-                            effectedCells.addAll(getAllAffected(model,currentEffected));
-                        }
-                    }
-                    //This needs to be verified that we are removing it
+
                     unsolvedCells.remove(currentEffected);
                     unsolvedCells.add(currentEffected);
                 }
@@ -102,22 +116,9 @@ public class CSPSolver extends SudokuSolver {
         return "CSPSolver";
     }
 
-    //https://stackoverflow.com/questions/2864840/treemap-sort-by-value
-    static <K,V extends Comparable<? super V>>
-    SortedSet<Map.Entry<K,V>> entriesSortedByValues(Map<K,V> map) {
-        SortedSet<Map.Entry<K,V>> sortedEntries = new TreeSet<Map.Entry<K,V>>(
-                new Comparator<Map.Entry<K,V>>() {
-                    @Override public int compare(Map.Entry<K,V> e1, Map.Entry<K,V> e2) {
-                        int res = e1.getValue().compareTo(e2.getValue());
-                        return res != 0 ? res : 1;
-                    }
-                }
-        );
-        sortedEntries.addAll(map.entrySet());
-        return sortedEntries;
-    }
 
     private PriorityQueue<CSPEntity> getAllAffected(SudokuPuzzle model, CSPEntity currentEntity){
+        stats.numberOfNodesExplored += nodesExploredForGettingValidMoves(model.getPuzzleSize());
         PriorityQueue<CSPEntity> res = new PriorityQueue<>();
         for (int i = 0; i < model.getPuzzleWidth(); i++) {
             SudokuCell currentRowCell = model.getSudokuCell(i,currentEntity.col);
@@ -149,40 +150,7 @@ public class CSPSolver extends SudokuSolver {
 
 
     }
-    class MyPoint {
-        public int row;
-        public int col;
-        public Point point;
 
-        public MyPoint(int row, int col, Point point) {
-            this.row = row;
-            this.col = col;
-            this.point = point;
-        }
-
-        @Override
-        public int hashCode() {
-            return point.hashCode();
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            return point.equals(obj);
-        }
-    }
-
-    class MyHashSet extends HashSet<Integer> implements Comparable{
-        @Override
-        public int compareTo(Object o) {
-            if (this.size() < ((MyHashSet) o).size()) {
-                return -1;
-            }
-            if (this.size() > ((MyHashSet) o).size()) {
-                return 1;
-            }
-            return 0;
-        }
-    }
 
     class CSPEntity implements Comparable{
         public int row;

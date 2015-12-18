@@ -158,7 +158,7 @@ public class SudokuCell {
         if (isInitial) {
             gg.setColor(Color.BLUE);
         } else {
-            gg.setColor(Color.CYAN);
+            gg.setColor(Color.RED);
         }
         int x = margin;
         int y = -(int) Math.round(r.getY());

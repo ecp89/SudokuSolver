@@ -24,6 +24,9 @@ public class BacktrackingSolver extends SudokuSolver {
     }
 
     private boolean solverHelper(SudokuPuzzle model, SudokuFrame frame, int index){
+        if(shouldAbort()){
+            return true;
+        }
         stats.numberOfNodesExplored ++;
         final int width = model.getPuzzleWidth();
         if(index == width*width){

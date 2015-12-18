@@ -11,6 +11,9 @@ import java.util.List;
  */
 public abstract class SudokuSolver {
 
+    protected SolvedPuzzleStatistics stats;
+    private static final int ABORT_DEPTH = 5000000;
+
     /**
      * Solves the prefilled in model returning when all of
      * the model is filled in in a valid sudoku
@@ -34,7 +37,7 @@ public abstract class SudokuSolver {
 
     }
 
-    protected SolvedPuzzleStatistics stats;
+
 
     protected long setUp(SudokuPuzzle model){
         stats= new SolvedPuzzleStatistics();
@@ -64,6 +67,9 @@ public abstract class SudokuSolver {
         return numInUnit + rowsAndCol;
     }
 
+    protected boolean shouldAbort(){
+        return stats.numberOfNodesExplored >= ABORT_DEPTH;
+    }
 
 
 }

@@ -62,7 +62,7 @@ public class DatabaseManagerSingleton {
             if(size == 0){
                 System.out.println("Result set is empty");
             }
-            puzzleStatement=con.prepareStatement("select * from PUZZLES where rating=?");
+            puzzleStatement=con.prepareStatement("select * from PUZZLES where rating=? order by puzzle_id ASC");
             puzzleStatement.setString(1, difficulty.getDisplayString());
 
             rs=puzzleStatement.executeQuery();
@@ -90,7 +90,43 @@ public class DatabaseManagerSingleton {
     }
 
 
+    public static PuzzleEntity[] getBulk(SudokuDifficulty difficulty, int number) throws SQLException{
+        Connection con = null;
+        PreparedStatement puzzleStatement = null;
+        ResultSet rs = null;
+        PuzzleEntity[] res = new PuzzleEntity[number];
+        try {
 
+            con=DatabaseManagerSingleton.getConnection();
+
+            puzzleStatement=con.prepareStatement("select * from PUZZLES where rating=?");
+            puzzleStatement.setString(1, difficulty.getDisplayString());
+
+
+            rs=puzzleStatement.executeQuery();
+
+            if(rs.next()){
+                for (int i = 0; i <number; i++) {
+                    res[i]= new PuzzleEntity(rs);
+                }
+            } else {
+                System.err.println("Problems with result set for puzzle");
+            }
+
+
+
+        } catch (Exception e) { System.out.println(e);}
+        finally{
+            if(rs!=null){
+                rs.close();
+            }if (puzzleStatement!=null){
+                puzzleStatement.close();
+            }if(con!=null){
+                con.close();
+            }
+        }
+        return res;
+    }
 
 
 

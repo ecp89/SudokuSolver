@@ -5,8 +5,8 @@ import java.util.*;
 /**
  * Created by ericpass on 12/17/15.
  */
-public class Generator {
-    private static final Random random = new Random();
+public class Generator extends AbstractGenerator {
+
 
     public static void generate(SudokuPuzzle model, int numberOfCluesLeft){
         randomSolve(model);
@@ -18,24 +18,7 @@ public class Generator {
 
     }
 
-    private static void createHolesRandomly(SudokuPuzzle model, int numberOfRemovals){
-        final int width = model.getPuzzleWidth();
-        final int upperIndex = width*width;
-        int randomIndex = 0;
-        while(numberOfRemovals != 0){
-            randomIndex = random.nextInt(upperIndex);
-            int row = randomIndex / width;
-            int col = randomIndex % width;
-            SudokuCell currentCell = model.getSudokuCell(row, col);
-            if(currentCell.isInitial()){
-                currentCell.setIsInitial(false);
-                currentCell.setValue(0);
-                numberOfRemovals--;
-                model.setSudokuCell(currentCell, row, col);
-            }
 
-        }
-    }
 
     /**
      * Distribute numberOfHoles to keep the number of

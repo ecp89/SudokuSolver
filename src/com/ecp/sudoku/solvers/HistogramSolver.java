@@ -44,9 +44,10 @@ public class HistogramSolver extends SudokuSolver {
         return tearDown(startTime);
 
     }
-    private int count =0;
     private boolean histoSolverHelper(SudokuPuzzle model, SudokuFrame frame, int index) {
-        count++;
+        if(shouldAbort()){
+            return true;
+        }
         stats.numberOfNodesExplored++;
         final int width = model.getPuzzleWidth();
         if(index == width*width){

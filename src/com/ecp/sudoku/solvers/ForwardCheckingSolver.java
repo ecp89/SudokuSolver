@@ -30,6 +30,9 @@ public class ForwardCheckingSolver extends SudokuSolver{
     }
 
     private boolean naiveSolverHelper(SudokuPuzzle model, SudokuFrame frame, int index, SolvedPuzzleStatistics stats) {
+        if(shouldAbort()){
+            return true;
+        }
         final int width = model.getPuzzleWidth();
         stats.numberOfNodesExplored ++;
 
