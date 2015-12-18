@@ -31,6 +31,8 @@ public class ButtonPanel {
 
     private JComboBox difficultyDropDown;
     private JButton loadButton;
+    private JButton reloadButton;
+    private PuzzleEntity lastEntity;
 
     private JTextField numberOfBoxesToRemove;
     private JButton generateButton;
@@ -42,6 +44,8 @@ public class ButtonPanel {
     private SudokuFrame frame;
 
     private SudokuPuzzle model;
+
+    private SudokuSolver solver = new NaiveSolver();
 
     public ButtonPanel(SudokuFrame sudokuFrame, SudokuPuzzle model) {
         this.frame = sudokuFrame;
@@ -114,13 +118,30 @@ public class ButtonPanel {
         addComponent(panel, dummy, 0, gridy++, 1, 1, buttonInsets, GridBagConstraints.LINE_START, GridBagConstraints.HORIZONTAL);
 
         solverDropDown = new JComboBox(SudokuSolver.getAllSupportedSolvers());
+        solverDropDown.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JComboBox cb = (JComboBox) e.getSource();
+                String solverName = (String)cb.getSelectedItem();
+                try{
+                    Class aiClass = Class.forName("com.ecp.sudoku.solvers."+solverName);
+                    solver = (SudokuSolver)aiClass.newInstance();
+                } catch (ClassNotFoundException except) {
+                    System.err.printf("Cannot find ai. %s\n",solverName);
+                    System.exit(1);
+                } catch (InstantiationException| IllegalAccessException except) {
+                    System.err.println("An error occurred with making ai");
+                    except.printStackTrace();
+                }
+            }
+        });
+
         addComponent(panel, solverDropDown, 0, gridy++, 1, 1, buttonInsets, GridBagConstraints.LINE_START, GridBagConstraints.HORIZONTAL);
 
         solveButton = new JButton("Solve");
         solveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                NaiveSolver solver = new NaiveSolver();
                 SolvedPuzzleStatistics stats = solver.SolvePuzzle(model, frame);
                 System.out.println(stats);
             }
@@ -153,12 +174,12 @@ public class ButtonPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    PuzzleEntity entity = DatabaseManagerSingleton.getRandomPuzzel(model.getDifficulty());
-                    if(entity == null) {
+                    lastEntity = DatabaseManagerSingleton.getRandomPuzzel(model.getDifficulty());
+                    if(lastEntity == null) {
                         return;
                     }
                     restPuzzleButton.doClick();
-                    model.loadPuzzleFromEntity(entity);
+                    model.loadPuzzleFromEntity(lastEntity);
                     frame.repaintSudokuPanel();
                 } catch (SQLException e1) {
                     System.err.println("DB error when trying to load puzzle");
@@ -170,8 +191,22 @@ public class ButtonPanel {
 
         });
         loadButton.setSelected(false);
-
         addComponent(panel, loadButton, 0, gridy++, 1, 1, buttonInsets, GridBagConstraints.LINE_START, GridBagConstraints.HORIZONTAL);
+
+        reloadButton = new JButton("Reload");
+        reloadButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(lastEntity == null) {
+                    return;
+                }
+                restPuzzleButton.doClick();
+                model.loadPuzzleFromEntity(lastEntity);
+                frame.repaintSudokuPanel();
+            }
+        });
+
+        addComponent(panel, reloadButton, 0, gridy++, 1, 1, buttonInsets, GridBagConstraints.LINE_START, GridBagConstraints.HORIZONTAL);
 
         JPanel dummy2 =new JPanel();
         addComponent(panel, dummy2, 0, gridy++, 1, 1, buttonInsets, GridBagConstraints.LINE_START, GridBagConstraints.HORIZONTAL);

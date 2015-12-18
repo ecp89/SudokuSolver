@@ -24,7 +24,7 @@ public abstract class SudokuSolver {
     public static String[] getAllSupportedSolvers(){
         String[] solvers = new String[2];
         solvers[0] = "NaiveSolver";
-        solvers[1] = "DancingLinks";
+        solvers[1] = "PrioritySolver";
         return solvers;
 
     }

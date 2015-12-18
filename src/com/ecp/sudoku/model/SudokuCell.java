@@ -183,4 +183,20 @@ public class SudokuCell {
     public boolean contains(Point point) {
         return bounds.contains(point);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        SudokuCell that = (SudokuCell) o;
+
+        return !(cellLocation != null ? !cellLocation.equals(that.cellLocation) : that.cellLocation != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return cellLocation != null ? cellLocation.hashCode() : 0;
+    }
 }

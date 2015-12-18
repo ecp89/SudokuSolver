@@ -88,6 +88,10 @@ public class SudokuFrame {
         sudokuPanel.repaint();
     }
 
+    public void paintImmediately(){
+        sudokuPanel.repaint(10);
+    }
+
     public void setModel(SudokuPuzzle model) {
         this.model = model;
 
